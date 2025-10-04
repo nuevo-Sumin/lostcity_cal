@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로스트시티 점수 계산기</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="language-toggle">
+                <button class="lang-btn active" id="lang-kr">한국어</button>
+                <button class="lang-btn" id="lang-en">English</button>
+            </div>
+            <h1 data-kr="로스트시티" data-en="Lost City">로스트시티</h1>
+            <p data-kr="점수 계산" data-en="Score Calculator">점수 계산</p>
+        </div>
+        
+        <div class="content">
+            <div class="instructions">
+                <h3 data-kr="📋 사용법:" data-en="📋 How to use:">📋 사용법:</h3>
+                <ul>
+                    <li data-kr="플레이어 이름을 입력하세요 (선택사항)" data-en="Enter player name (optional)">플레이어 이름을 입력하세요 (선택사항)</li>
+                    <li data-kr="목표점수 카드 개수를 입력하세요 (개당 10점)" data-en="Enter target score cards (10 points each)">목표점수 카드 개수를 입력하세요 (개당 10점)</li>
+                    <li data-kr="원하는 색상을 선택하세요" data-en="Select desired colors">원하는 색상을 선택하세요</li>
+                    <li data-kr="각 색상의 카드를 체크하세요" data-en="Check cards for each color">각 색상의 카드를 체크하세요</li>
+                    <li data-kr="연구 카드 개수를 입력하세요 (0-3)" data-en="Enter wager cards (0-3)">연구 카드 개수를 입력하세요 (0-3)</li>
+                </ul>
+            </div>
+
+            <div class="bonus-cards-section">
+                <h3 data-kr="👤 플레이어 정보" data-en="👤 Player Info">👤 플레이어 정보</h3>
+                <div class="bonus-input" style="margin-bottom: 15px;">
+                    <label for="player-name" data-kr="이름:" data-en="Name:">이름:</label>
+                    <input type="text" id="player-name" placeholder="이름을 입력하세요">
+                </div>
+                <h3 data-kr="🎯 목표점수 카드" data-en="🎯 Target Score Cards">🎯 목표점수 카드</h3>
+                <div class="bonus-input">
+                    <label for="target-cards" data-kr="개수:" data-en="Count:">개수:</label>
+                    <input type="number" id="target-cards" min="0" max="10" placeholder="0-10">
+                </div>
+            </div>
+
+            <div class="color-selector">
+                <h3 data-kr="🎨 색상 선택" data-en="🎨 Color Selection">🎨 색상 선택</h3>
+                <div class="color-buttons">
+                    <button class="color-btn" data-color="yellow" style="background-color: #ffd700;">
+                        <div class="card-number">💛</div>
+                        <div class="card-suit" data-kr="노랑" data-en="Yellow">노랑</div>
+                    </button>
+                    <button class="color-btn" data-color="blue" style="background-color: #4169e1;">
+                        <div class="card-number">💙</div>
+                        <div class="card-suit" data-kr="파랑" data-en="Blue">파랑</div>
+                    </button>
+                    <button class="color-btn" data-color="purple" style="background-color: #9370db;">
+                        <div class="card-number">💜</div>
+                        <div class="card-suit" data-kr="보라" data-en="Purple">보라</div>
+                    </button>
+                    <button class="color-btn" data-color="green" style="background-color: #32cd32;">
+                        <div class="card-number">💚</div>
+                        <div class="card-suit" data-kr="초록" data-en="Green">초록</div>
+                    </button>
+                    <button class="color-btn" data-color="red" style="background-color: #ff4444;">
+                        <div class="card-number">❤️</div>
+                        <div class="card-suit" data-kr="빨강" data-en="Red">빨강</div>
+                    </button>
+                </div>
+            </div>
+
+            <div class="card-inputs">
+                <div class="expedition" data-color="yellow" style="display: none;">
+                    <h3 data-kr="💛 노랑 탐험" data-en="💛 Yellow">💛 노랑 탐험</h3>
+                    <div class="investment-input">
+                        <label for="yellow-wager" data-kr="연구 카드:" data-en="Wager:">연구 카드:</label>
+                        <input type="number" id="yellow-wager" min="0" max="3" placeholder="0-3">
+                    </div>
+                    <div class="card-checkboxes">
+                        <div class="card-checkbox"><input type="checkbox" id="yellow-2" value="2"><label for="yellow-2">2</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="yellow-3" value="3"><label for="yellow-3">3</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="yellow-4" value="4"><label for="yellow-4">4</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="yellow-5" value="5"><label for="yellow-5">5</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="yellow-6" value="6"><label for="yellow-6">6</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="yellow-7" value="7"><label for="yellow-7">7</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="yellow-8" value="8"><label for="yellow-8">8</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="yellow-9" value="9"><label for="yellow-9">9</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="yellow-10" value="10"><label for="yellow-10">10</label></div>
+                    </div>
+                </div>
+
+                <div class="expedition" data-color="blue" style="display: none;">
+                    <h3 data-kr="💙 파랑 탐험" data-en="💙 Blue">💙 파랑 탐험</h3>
+                    <div class="investment-input">
+                        <label for="blue-wager" data-kr="연구 카드:" data-en="Wager:">연구 카드:</label>
+                        <input type="number" id="blue-wager" min="0" max="3" placeholder="0-3">
+                    </div>
+                    <div class="card-checkboxes">
+                        <div class="card-checkbox"><input type="checkbox" id="blue-2" value="2"><label for="blue-2">2</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="blue-3" value="3"><label for="blue-3">3</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="blue-4" value="4"><label for="blue-4">4</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="blue-5" value="5"><label for="blue-5">5</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="blue-6" value="6"><label for="blue-6">6</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="blue-7" value="7"><label for="blue-7">7</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="blue-8" value="8"><label for="blue-8">8</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="blue-9" value="9"><label for="blue-9">9</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="blue-10" value="10"><label for="blue-10">10</label></div>
+                    </div>
+                </div>
+
+                <div class="expedition" data-color="purple" style="display: none;">
+                    <h3 data-kr="💜 보라 탐험" data-en="💜 Purple">💜 보라 탐험</h3>
+                    <div class="investment-input">
+                        <label for="purple-wager" data-kr="연구 카드:" data-en="Wager:">연구 카드:</label>
+                        <input type="number" id="purple-wager" min="0" max="3" placeholder="0-3">
+                    </div>
+                    <div class="card-checkboxes">
+                        <div class="card-checkbox"><input type="checkbox" id="purple-2" value="2"><label for="purple-2">2</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="purple-3" value="3"><label for="purple-3">3</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="purple-4" value="4"><label for="purple-4">4</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="purple-5" value="5"><label for="purple-5">5</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="purple-6" value="6"><label for="purple-6">6</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="purple-7" value="7"><label for="purple-7">7</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="purple-8" value="8"><label for="purple-8">8</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="purple-9" value="9"><label for="purple-9">9</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="purple-10" value="10"><label for="purple-10">10</label></div>
+                    </div>
+                </div>
+
+                <div class="expedition" data-color="green" style="display: none;">
+                    <h3 data-kr="💚 초록 탐험" data-en="💚 Green">💚 초록 탐험</h3>
+                    <div class="investment-input">
+                        <label for="green-wager" data-kr="연구 카드:" data-en="Wager:">연구 카드:</label>
+                        <input type="number" id="green-wager" min="0" max="3" placeholder="0-3">
+                    </div>
+                    <div class="card-checkboxes">
+                        <div class="card-checkbox"><input type="checkbox" id="green-2" value="2"><label for="green-2">2</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="green-3" value="3"><label for="green-3">3</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="green-4" value="4"><label for="green-4">4</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="green-5" value="5"><label for="green-5">5</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="green-6" value="6"><label for="green-6">6</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="green-7" value="7"><label for="green-7">7</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="green-8" value="8"><label for="green-8">8</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="green-9" value="9"><label for="green-9">9</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="green-10" value="10"><label for="green-10">10</label></div>
+                    </div>
+                </div>
+
+                <div class="expedition" data-color="red" style="display: none;">
+                    <h3 data-kr="❤️ 빨강 탐험" data-en="❤️ Red">❤️ 빨강 탐험</h3>
+                    <div class="investment-input">
+                        <label for="red-wager" data-kr="연구 카드:" data-en="Wager:">연구 카드:</label>
+                        <input type="number" id="red-wager" min="0" max="3" placeholder="0-3">
+                    </div>
+                    <div class="card-checkboxes">
+                        <div class="card-checkbox"><input type="checkbox" id="red-2" value="2"><label for="red-2">2</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="red-3" value="3"><label for="red-3">3</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="red-4" value="4"><label for="red-4">4</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="red-5" value="5"><label for="red-5">5</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="red-6" value="6"><label for="red-6">6</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="red-7" value="7"><label for="red-7">7</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="red-8" value="8"><label for="red-8">8</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="red-9" value="9"><label for="red-9">9</label></div>
+                        <div class="card-checkbox"><input type="checkbox" id="red-10" value="10"><label for="red-10">10</label></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="calculate-btn" onclick="calculateScore()" data-kr="🎯 점수 계산" data-en="🎯 Calculate">🎯 점수 계산</button>
+                <button class="clear-btn" onclick="clearAll()" data-kr="🗑️ 리셋" data-en="🗑️ Clear">🗑️ 리셋</button>
+            </div>
+
+            <div class="error" id="error-message"></div>
+
+            <div class="results" id="results">
+                <h3 data-kr="📊 점수 상세" data-en="📊 Score Breakdown">📊 점수 상세</h3>
+                <div class="score-breakdown" id="score-breakdown"></div>
+                <div class="total-score" id="total-score"></div>
+            </div>
+
+            <div class="leaderboard" id="leaderboard" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <h3 data-kr="🏆 점수 기록" data-en="🏆 Leaderboard">🏆 점수 기록</h3>
+                    <button class="clear-history-btn" onclick="clearHistory()" data-kr="기록 삭제" data-en="Clear">기록 삭제</button>
+                </div>
+                <div class="leaderboard-list" id="leaderboard-list"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

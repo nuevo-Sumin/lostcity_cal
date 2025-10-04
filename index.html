@@ -5,382 +5,675 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>로스트시티 점수 계산기</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, white 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, white 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+    }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
 
-        .header {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
+    .header {
+        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        color: white;
+        padding: 30px;
+        text-align: center;
+        position: relative;
+    }
 
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
+    .language-toggle {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        display: flex;
+        gap: 5px;
+    }
 
-        .header p {
-            font-size: 1.1em;
-            opacity: 0.9;
-        }
+    .lang-btn {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-size: 0.8em;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
 
-        .content {
-            padding: 30px;
-        }
+    .lang-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
 
-        .card-inputs {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
+    .lang-btn.active {
+        background: rgba(255, 255, 255, 0.4);
+        border-color: rgba(255, 255, 255, 0.6);
+    }
 
-        .expedition {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 20px;
-            border: 2px solid #e9ecef;
-            transition: all 0.3s ease;
-        }
+    .header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
 
-        .expedition:hover {
-            border-color: #007bff;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
+    .header p {
+        font-size: 1.1em;
+        opacity: 0.9;
+    }
 
-        .expedition h3 {
-            color: #495057;
-            margin-bottom: 20px;
-            text-align: center;
-            font-size: 1.3em;
-        }
+    .content {
+        padding: 30px;
+    }
 
+    .instructions {
+        background: #fff3cd;
+        border: 1px solid #ffeaa7;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 30px;
+    }
+
+    .instructions h3 {
+        color: #856404;
+        margin-bottom: 15px;
+    }
+
+    .instructions ul {
+        color: #856404;
+        padding-left: 20px;
+    }
+
+    .instructions li {
+        margin-bottom: 8px;
+    }
+
+    .bonus-cards-section {
+        background: #e8f5e8;
+        border: 2px solid #28a745;
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .bonus-cards-section h3 {
+        color: #155724;
+        margin-bottom: 15px;
+        text-align: center;
+        font-size: 1.3em;
+    }
+
+    .bonus-input {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .bonus-input label {
+        font-weight: 600;
+        color: #155724;
+        font-size: 1.1em;
+    }
+
+    .bonus-input input {
+        padding: 8px 12px;
+        border: 2px solid #28a745;
+        border-radius: 8px;
+        font-size: 16px;
+        text-align: center;
+        transition: border-color 0.3s ease;
+    }
+
+    .bonus-input input[type="number"] {
+        width: 5rem;
+    }
+
+    .bonus-input input[type="text"] {
+        width: 200px;
+    }
+
+    .bonus-input input:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+    }
+
+    .color-selector {
+        background: #f8f9fa;
+        border: 2px solid #e9ecef;
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .color-selector h3 {
+        color: #495057;
+        margin-bottom: 15px;
+        font-size: 1.3em;
+    }
+
+    .color-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .color-btn {
+        width: 80px;
+        height: 120px;
+        border: 3px solid #dee2e6;
+        border-radius: 12px;
+        font-size: 0.9em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        color: white;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .color-btn:hover {
+        transform: translateY(-3px) rotate(2deg);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        border-color: #655b00;
+    }
+
+    .color-btn.active {
+        border-color: #000000;
+        box-shadow: 0 0 0 3px rgba(69, 67, 24, 0.3), 0 8px 16px rgba(221, 226, 175, 0.2);
+        transform: translateY(-3px) rotate(-2deg) scale(1.05);
+    }
+
+    .color-btn::before {
+        content: '';
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        right: 8px;
+        bottom: 8px;
+        border: 1px solid rgba(255,255,255,0.3);
+        border-radius: 6px;
+        pointer-events: none;
+    }
+
+    .color-btn .card-number {
+        font-size: 1.2em;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .color-btn .card-suit {
+        font-size: 0.8em;
+        opacity: 0.9;
+    }
+
+    .card-inputs {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .expedition {
+        background: #f8f9fa;
+        border-radius: 15px;
+        padding: 20px;
+        border: 2px solid #e9ecef;
+        transition: all 0.3s ease;
+    }
+
+    .expedition:hover {
+        border-color: #007bff;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .expedition h3 {
+        color: #495057;
+        margin-bottom: 20px;
+        text-align: center;
+        font-size: 1.3em;
+    }
+
+    .investment-input {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    .investment-input label {
+        font-weight: 600;
+        color: #495057;
+    }
+
+    .investment-input input {
+        width: 5rem;
+        padding: 8px 12px;
+        border: 2px solid #dee2e6;
+        border-radius: 8px;
+        font-size: 16px;
+        text-align: center;
+        transition: border-color 0.3s ease;
+    }
+
+    .card-checkboxes {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 8px;
+        margin-bottom: 15px;
+    }
+
+    .card-checkbox {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .card-checkbox input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+    }
+
+    .card-checkbox label {
+        font-size: 0.9em;
+        font-weight: 600;
+        color: #495057;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .button-group {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .calculate-btn {
+        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        font-size: 1.2em;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 100%;
+        font-weight: 600;
+    }
+
+    .calculate-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0,123,255,0.3);
+    }
+
+    .calculate-btn:active {
+        transform: translateY(0);
+    }
+
+    .clear-btn {
+        background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        font-size: 1.2em;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        flex: 1;
+        font-weight: 600;
+    }
+
+    .clear-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(108,117,125,0.3);
+    }
+
+    .clear-btn:active {
+        transform: translateY(0);
+    }
+
+    .error {
+        background: #f8d7da;
+        border: 1px solid #f5c6cb;
+        color: #721c24;
+        padding: 15px;
+        border-radius: 10px;
+        margin-top: 20px;
+        display: none;
+    }
+
+    .error.show {
+        display: block;
+    }
+
+    .results {
+        background: #e8f5e8;
+        border: 2px solid #28a745;
+        border-radius: 15px;
+        padding: 20px;
+        margin-top: 20px;
+        display: none;
+    }
+
+    .results.show {
+        display: block;
+        animation: slideIn 0.5s ease;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .score-breakdown {
+        margin-top: 15px;
+    }
+
+    .score-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid #c3e6c3;
+    }
+
+    .score-item:last-child {
+        border-bottom: none;
+    }
+
+    .total-score {
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #155724;
+        text-align: center;
+        margin-top: 15px;
+        padding: 15px;
+        background: #d4edda;
+        border-radius: 10px;
+    }
+
+    .leaderboard {
+        background: #fff9e6;
+        border: 2px solid #ffd700;
+        border-radius: 15px;
+        padding: 20px;
+        margin-top: 20px;
+    }
+
+    .leaderboard h3 {
+        color: #856404;
+        margin: 0;
+        font-size: 1.3em;
+    }
+
+    .clear-history-btn {
+        background: #dc3545;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.9em;
+        transition: all 0.3s ease;
+    }
+
+    .clear-history-btn:hover {
+        background: #c82333;
+        transform: translateY(-2px);
+    }
+
+    .leaderboard-list {
+        margin-top: 15px;
+    }
+
+    .leaderboard-item {
+        display: grid;
+        grid-template-columns: 40px 1fr 80px 120px;
+        gap: 10px;
+        padding: 12px;
+        background: white;
+        border-radius: 8px;
+        margin-bottom: 8px;
+        align-items: center;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+
+    .leaderboard-item:hover {
+        transform: translateX(5px);
+        border-color: #ffd700;
+        box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+    }
+
+    .leaderboard-item.rank-1 {
+        background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+        border-color: #d4af37;
+    }
+
+    .leaderboard-item.rank-2 {
+        background: linear-gradient(135deg, #c0c0c0 0%, #e8e8e8 100%);
+        border-color: #a8a8a8;
+    }
+
+    .leaderboard-item.rank-3 {
+        background: linear-gradient(135deg, #cd7f32 0%, #e89e6d 100%);
+        border-color: #b5692d;
+    }
+
+    .rank-number {
+        font-size: 1.4em;
+        font-weight: bold;
+        color: #495057;
+        text-align: center;
+    }
+
+    .rank-1 .rank-number {
+        color: #b8860b;
+    }
+
+    .rank-2 .rank-number {
+        color: #6c757d;
+    }
+
+    .rank-3 .rank-number {
+        color: #8b4513;
+    }
+
+    .player-name {
+        font-weight: 600;
+        color: #495057;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .rank-1 .player-name {
+        color: #7d5f00;
+    }
+
+    .rank-2 .player-name {
+        color: #495057;
+    }
+
+    .rank-3 .player-name {
+        color: #6d3410;
+    }
+
+    .score-value {
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #28a745;
+        text-align: right;
+    }
+
+    .rank-1 .score-value {
+        color: #7d5f00;
+    }
+
+    .rank-2 .score-value {
+        color: #495057;
+    }
+
+    .rank-3 .score-value {
+        color: #6d3410;
+    }
+
+    .timestamp {
+        font-size: 0.85em;
+        color: #6c757d;
+        text-align: right;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
         .card-checkboxes {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 8px;
-            margin-bottom: 15px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
         }
-
-        .card-checkbox {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
+        
+        .header h1 {
+            font-size: 2em;
         }
-
-        .card-checkbox input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
+        
+        .content {
+            padding: 20px;
         }
-
+        
+        .expedition {
+            padding: 15px;
+        }
+        
         .card-checkbox label {
-            font-size: 0.9em;
-            font-weight: 600;
-            color: #495057;
-            text-align: center;
-            cursor: pointer;
+            font-size: 0.8em;
         }
 
-        .investment-input {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 15px;
+        .leaderboard-item {
+            grid-template-columns: 30px 1fr 70px;
+            gap: 8px;
         }
 
-        .investment-input label {
-            font-weight: 600;
-            color: #495057;
+        .timestamp {
+            display: none;
         }
+    }
 
-        .investment-input input {
-            width: 5rem;
-            padding: 8px 12px;
-            border: 2px solid #dee2e6;
-            border-radius: 8px;
-            font-size: 16px;
-            text-align: center;
-            transition: border-color 0.3s ease;
-        }
-
-        .card-input input:focus {
-            outline: none;
-            border-color: #007bff;
-            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
-        }
-
-        .calculate-btn {
-            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 1.2em;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            margin-bottom: 20px;
-            font-weight: 600;
-        }
-
-        .calculate-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0,123,255,0.3);
-        }
-
-        .calculate-btn:active {
-            transform: translateY(0);
-        }
-
-        .button-group {
-            display: flex;
+    @media (max-width: 480px) {
+        .card-checkboxes {
+            grid-template-columns: repeat(2, 1fr);
             gap: 15px;
-            margin-bottom: 20px;
         }
-
-        .clear-btn {
-            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 1.2em;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            flex: 1;
-            font-weight: 600;
+        
+        .header h1 {
+            font-size: 1.8em;
         }
-
-        .clear-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(108,117,125,0.3);
+        
+        .container {
+            margin: 10px;
         }
-
-        .clear-btn:active {
-            transform: translateY(0);
-        }
-
-        .results {
-            background: #e8f5e8;
-            border: 2px solid #28a745;
-            border-radius: 15px;
-            padding: 20px;
-            margin-top: 20px;
-            display: none;
-        }
-
-        .results.show {
-            display: block;
-            animation: slideIn 0.5s ease;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .score-breakdown {
-            margin-top: 15px;
-        }
-
-        .score-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #c3e6c3;
-        }
-
-        .score-item:last-child {
-            border-bottom: none;
-        }
-
-        .total-score {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #155724;
-            text-align: center;
-            margin-top: 15px;
-            padding: 15px;
-            background: #d4edda;
-            border-radius: 10px;
-        }
-
-        .instructions {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 30px;
-        }
-
-        .instructions h3 {
-            color: #856404;
-            margin-bottom: 15px;
-        }
-
-        .instructions ul {
-            color: #856404;
-            padding-left: 20px;
-        }
-
-        .instructions li {
-            margin-bottom: 8px;
-        }
-
-        .error {
-            background: #f8d7da;
-            border: 1px solid #f5c6cb;
-            color: #721c24;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 20px;
-            display: none;
-        }
-
-        .error.show {
-            display: block;
-        }
-
-        @media (max-width: 768px) {
-            .card-checkboxes {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 12px;
-            }
-            
-            .header h1 {
-                font-size: 2em;
-            }
-            
-            .content {
-                padding: 20px;
-            }
-            
-            .expedition {
-                padding: 15px;
-            }
-            
-            .card-checkbox label {
-                font-size: 0.8em;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .card-checkboxes {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 15px;
-            }
-            
-            .header h1 {
-                font-size: 1.8em;
-            }
-            
-            .container {
-                margin: 10px;
-            }
-        }
+    }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>로스트시티 Lost City</h1>
-            <p>점수 계산 Score Calculator</p>
+            <div class="language-toggle">
+                <button class="lang-btn" id="lang-kr">한국어</button>
+                <button class="lang-btn" id="lang-en">English</button>
+            </div>
+            <h1 data-kr="로스트시티" data-en="Lost City">로스트시티</h1>
+            <p data-kr="점수 계산" data-en="Score Calculator">점수 계산</p>
         </div>
         <!--TODO 한국어변환 -->
         <div class="content">
             <div class="instructions">
-                <h3>📋 How to use:</h3>
+                <h3 data-kr="📋 사용법:" data-en="📋 How to use:">📋 사용법:</h3>
                 <ul>
-                    <li>Check the boxes for the card numbers you have in each expedition</li>
-                    <li>Enter the number of investment cards (0-3)</li>
-                    <li>Get bonus 20 points for 8+ total cards (including investments)</li>
-                    <li>Click "Calculate Score" to see your final score</li>
+                    <li data-kr="목표점수 카드 개수를 입력하세요 (확장판, 개당 10점)" data-en="Enter the number of target score cards (extension version, 10 points each)">목표점수 카드 개수를 입력하세요 (색상과 무관한 별개 카드, 개당 10점)</li>
+                    <li data-kr="원하는 색상 카드들을 선택하세요 (노랑, 파랑, 보라, 초록, 빨강 중 여러 색상 동시 선택 가능)" data-en="Select your desired color cards (yellow, blue, purple, green, red - multiple colors can be selected)">원하는 색상 카드들을 선택하세요 (노랑, 파랑, 보라, 초록, 빨강 중 여러 색상 동시 선택 가능)</li>
+                    <li data-kr="선택한 각 색상의 카드 번호를 체크하세요 (2-10)" data-en="Check the card numbers you have for each selected color (2-10)">선택한 각 색상의 카드 번호를 체크하세요 (2-10)</li>
+                    <li data-kr="각 색상의 연구 카드(x2) 개수를 입력하세요 (0-3)" data-en="Enter the number of Wager Cards(x2) for each color (0-3)">각 색상의 연구 카드(Wager Cards(x2)) 개수를 입력하세요 (0-3)</li>
+                    <li data-kr="점수 계산: 각 색상별 점수 + 목표점수 카드 점수 = 총점" data-en="Score calculation: Each color score + Target score cards = Total">점수 계산: 각 색상별 점수 + 목표점수 카드 점수 = 총점</li>
+                    <li data-kr="각 색상 점수: (카드 합계 - 20(탐험 페널티)) × (연구카드+1) + 8장 이상 보너스 20점" data-en="Each color score: (Card sum - 20(expedition penalty)) × (Wager Cards(x2)+1) + 20 bonus for 8+ cards">각 색상 점수: 카드 합계 - 20(탐험 페널티) × (연구카드+1) + 8장 이상 보너스 20점</li>
+                    <li data-kr="&quot;점수 계산&quot; 버튼을 클릭하여 최종 점수를 확인하세요" data-en="Click &quot;Calculate Score&quot; to see your final score">&quot;점수 계산&quot; 버튼을 클릭하여 최종 점수를 확인하세요</li>
                 </ul>
             </div>
 
-            <div class="card-inputs">
-                <div class="expedition">
-                    <h3>🔴 Red Expedition</h3>
-                    <div class="investment-input">
-                        <label>Investment:
-                        <input type="number" id="red-investment" min="0" max="3" placeholder="0-3"></label>
-                    </div>
-                    <div class="card-checkboxes">
-                        <div class="card-checkbox">
-                            <input type="checkbox" id="red-2" value="2">
-                            <label for="red-2">2</label>
-                        </div>
-                        <div class="card-checkbox">
-                            <input type="checkbox" id="red-3" value="3">
-                            <label for="red-3">3</label>
-                        </div>
-                        <div class="card-checkbox">
-                            <input type="checkbox" id="red-4" value="4">
-                            <label for="red-4">4</label>
-                        </div>
-                        <div class="card-checkbox">
-                            <input type="checkbox" id="red-5" value="5">
-                            <label for="red-5">5</label>
-                        </div>
-                        <div class="card-checkbox">
-                            <input type="checkbox" id="red-6" value="6">
-                            <label for="red-6">6</label>
-                        </div>
-                        <div class="card-checkbox">
-                            <input type="checkbox" id="red-7" value="7">
-                            <label for="red-7">7</label>
-                        </div>
-                        <div class="card-checkbox">
-                            <input type="checkbox" id="red-8" value="8">
-                            <label for="red-8">8</label>
-                        </div>
-                        <div class="card-checkbox">
-                            <input type="checkbox" id="red-9" value="9">
-                            <label for="red-9">9</label>
-                        </div>
-                        <div class="card-checkbox">
-                            <input type="checkbox" id="red-10" value="10">
-                            <label for="red-10">10</label>
-                        </div>
-                    </div>
+            <div class="bonus-cards-section">
+                <h3 data-kr="👤 플레이어 정보" data-en="👤 Player Info">👤 플레이어 정보</h3>
+                <div class="bonus-input" style="margin-bottom: 15px;">
+                    <label for="player-name" data-kr="이름:" data-en="Name:">이름:</label>
+                    <input type="text" id="player-name" placeholder="이름을 입력하세요">
                 </div>
+                <h3 data-kr="🎯 목표점수 카드" data-en="🎯 Target Score Cards">🎯 목표점수 카드</h3>
+                <div class="bonus-input">
+                    <label for="target-cards" data-kr="개수:" data-en="Count:">개수:</label>
+                    <input type="number" id="target-cards" min="0" max="10" placeholder="0-10">
+                </div>
+            </div>
 
-                <div class="expedition">
-                    <h3>🟡 Yellow Expedition</h3>
+            <div class="color-selector">
+                <h3 data-kr="🎨 색상 선택" data-en="🎨 Color Selection">🎨 색상 선택</h3>
+                <div class="color-buttons">
+                    <button class="color-btn" data-color="yellow" style="background-color: #ffd700;">
+                        <div class="card-number">💛</div>
+                        <div class="card-suit" data-kr="노랑" data-en="Yellow">노랑</div>
+                    </button>
+                    <button class="color-btn" data-color="blue" style="background-color: #4169e1;">
+                        <div class="card-number">💙</div>
+                        <div class="card-suit" data-kr="파랑" data-en="Blue">파랑</div>
+                    </button>
+                    <button class="color-btn" data-color="purple" style="background-color: #9370db;">
+                        <div class="card-number">💜</div>
+                        <div class="card-suit" data-kr="보라" data-en="Purple">보라</div>
+                    </button>
+                    <button class="color-btn" data-color="green" style="background-color: #32cd32;">
+                        <div class="card-number">💚</div>
+                        <div class="card-suit" data-kr="초록" data-en="Green">초록</div>
+                    </button>
+                    <button class="color-btn" data-color="red" style="background-color: #ff4444;">
+                        <div class="card-number">❤️</div>
+                        <div class="card-suit" data-kr="빨강" data-en="Red">빨강</div>
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="card-inputs">
+                
+                <div class="expedition" data-color="yellow" style="display: none;">
+                    <h3 data-kr="💛 노랑 탐험" data-en="💛 Yellow Expedition">💛 Yellow Expedition</h3>
                     <div class="investment-input">
-                        <label>Investment:
-                        <input type="number" id="yellow-investment" min="0" max="3" placeholder="0-3"></label>
+                        <label for="yellow-wager" data-kr="연구 카드(x2):" data-en="Wager Cards(x2):">연구 카드(x2):</label>
+                        <input type="number" id="yellow-wager" min="0" max="3" placeholder="0-3">
                     </div>
                     <div class="card-checkboxes">
                         <div class="card-checkbox">
@@ -421,58 +714,11 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="expedition">
-                    <h3>🟢 Green Expedition</h3>
+                <div class="expedition" data-color="blue" style="display: none;">
+                    <h3 data-kr="💙 파랑 탐험" data-en="💙 Blue Expedition">💙 Blue Expedition</h3>
                     <div class="investment-input">
-                        <label>Investment:
-                            <input type="number" id="green-investment" min="0" max="3" placeholder="0-3"></label>
-                    </div>
-                    <div class="card-checkboxes">
-                        <div class="card-checkbox">
-                            <input type="checkbox" id="green-2" value="2">
-                            <label for="green-2">2</label>
-                        </div>
-                        <div class="card-checkbox">
-                            <input type="checkbox" id="green-3" value="3">
-                            <label for="green-3">3</label>
-                        </div>
-                        <div class="card-checkbox">
-                            <input type="checkbox" id="green-4" value="4">
-                            <label for="green-4">4</label>
-                        </div>
-                        <div class="card-checkbox">
-                            <input type="checkbox" id="green-5" value="5">
-                            <label for="green-5">5</label>
-                        </div>
-                        <div class="card-checkbox">
-                            <input type="checkbox" id="green-6" value="6">
-                            <label for="green-6">6</label>
-                        </div>
-                        <div class="card-checkbox">
-                            <input type="checkbox" id="green-7" value="7">
-                            <label for="green-7">7</label>
-                        </div>
-                        <div class="card-checkbox">
-                            <input type="checkbox" id="green-8" value="8">
-                            <label for="green-8">8</label>
-                        </div>
-                        <div class="card-checkbox">
-                            <input type="checkbox" id="green-9" value="9">
-                            <label for="green-9">9</label>
-                        </div>
-                        <div class="card-checkbox">
-                            <input type="checkbox" id="green-10" value="10">
-                            <label for="green-10">10</label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="expedition">
-                    <h3>🔵 Blue Expedition</h3>
-                    <div class="investment-input">
-                        <label>Investment:
-                            <input type="number" id="blue-investment" min="0" max="3" placeholder="0-3"></label>
+                        <label for="blue-wager" data-kr="연구 카드(x2):" data-en="Wager Cards(x2):">연구 카드(x2):</label>
+                            <input type="number" id="blue-wager" min="0" max="3" placeholder="0-3">
                     </div>
                     <div class="card-checkboxes">
                         <div class="card-checkbox">
@@ -514,11 +760,11 @@
                     </div>
                 </div>
 
-                <div class="expedition">
-                    <h3>🟣 Purple Expedition</h3>
+                <div class="expedition" data-color="purple" style="display: none;">
+                    <h3 data-kr="💜 보라 탐험" data-en="💜 Purple Expedition">💜 Purple Expedition</h3>
                     <div class="investment-input">
-                        <label>Investment:
-                        <input type="number" id="purple-investment" min="0" max="3" placeholder="0-3"></label>
+                        <label for="purple-wager" data-kr="연구 카드(x2):" data-en="Wager Cards(x2):">연구 카드(x2):</label>
+                        <input type="number" id="purple-wager" min="0" max="3" placeholder="0-3">
                     </div>
                     <div class="card-checkboxes">
                         <div class="card-checkbox">
@@ -559,42 +805,242 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="expedition" data-color="green" style="display: none;">
+                    <h3 data-kr="💚 초록 탐험" data-en="💚 Green Expedition">💚 Green Expedition</h3>
+                    <div class="investment-input">
+                        <label for="green-wager" data-kr="연구 카드(x2):" data-en="Wager Cards(x2):">연구 카드(x2):</label>
+                            <input type="number" id="green-wager" min="0" max="3" placeholder="0-3">
+                    </div>
+                    <div class="card-checkboxes">
+                        <div class="card-checkbox">
+                            <input type="checkbox" id="green-2" value="2">
+                            <label for="green-2">2</label>
+                        </div>
+                        <div class="card-checkbox">
+                            <input type="checkbox" id="green-3" value="3">
+                            <label for="green-3">3</label>
+                        </div>
+                        <div class="card-checkbox">
+                            <input type="checkbox" id="green-4" value="4">
+                            <label for="green-4">4</label>
+                        </div>
+                        <div class="card-checkbox">
+                            <input type="checkbox" id="green-5" value="5">
+                            <label for="green-5">5</label>
+                        </div>
+                        <div class="card-checkbox">
+                            <input type="checkbox" id="green-6" value="6">
+                            <label for="green-6">6</label>
+                        </div>
+                        <div class="card-checkbox">
+                            <input type="checkbox" id="green-7" value="7">
+                            <label for="green-7">7</label>
+                        </div>
+                        <div class="card-checkbox">
+                            <input type="checkbox" id="green-8" value="8">
+                            <label for="green-8">8</label>
+                        </div>
+                        <div class="card-checkbox">
+                            <input type="checkbox" id="green-9" value="9">
+                            <label for="green-9">9</label>
+                        </div>
+                        <div class="card-checkbox">
+                            <input type="checkbox" id="green-10" value="10">
+                            <label for="green-10">10</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="expedition" data-color="red" style="display: none;">
+                    <h3 data-kr="❤️ 빨강 탐험" data-en="❤️ Red Expedition">❤️ Red Expedition</h3>
+                    <div class="investment-input">
+                        <label for="red-wager" data-kr="연구 카드(x2):" data-en="Wager Cards(x2):">연구 카드(x2):</label>
+                        <input type="number" id="red-wager" min="0" max="3" placeholder="0-3">
+                    </div>
+                    <div class="card-checkboxes">
+                        <div class="card-checkbox">
+                            <input type="checkbox" id="red-2" value="2">
+                            <label for="red-2">2</label>
+                        </div>
+                        <div class="card-checkbox">
+                            <input type="checkbox" id="red-3" value="3">
+                            <label for="red-3">3</label>
+                        </div>
+                        <div class="card-checkbox">
+                            <input type="checkbox" id="red-4" value="4">
+                            <label for="red-4">4</label>
+                        </div>
+                        <div class="card-checkbox">
+                            <input type="checkbox" id="red-5" value="5">
+                            <label for="red-5">5</label>
+                        </div>
+                        <div class="card-checkbox">
+                            <input type="checkbox" id="red-6" value="6">
+                            <label for="red-6">6</label>
+                        </div>
+                        <div class="card-checkbox">
+                            <input type="checkbox" id="red-7" value="7">
+                            <label for="red-7">7</label>
+                        </div>
+                        <div class="card-checkbox">
+                            <input type="checkbox" id="red-8" value="8">
+                            <label for="red-8">8</label>
+                        </div>
+                        <div class="card-checkbox">
+                            <input type="checkbox" id="red-9" value="9">
+                            <label for="red-9">9</label>
+                        </div>
+                        <div class="card-checkbox">
+                            <input type="checkbox" id="red-10" value="10">
+                            <label for="red-10">10</label>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <div class="button-group">
-                <button class="calculate-btn" onclick="calculateScore()">🎯 Calculate Score</button>
-                <button class="clear-btn" onclick="clearAll()">🗑️ Clear All</button>
+                <button class="calculate-btn" onclick="calculateScore()" data-kr="🎯 점수 계산" data-en="🎯 Calculate Score">🎯 점수 계산</button>
+                <button class="clear-btn" onclick="clearAll()" data-kr="🗑️ 리셋" data-en="🗑️ Clear All">🗑️ 리셋</button>
             </div>
 
             <div class="error" id="error-message"></div>
 
             <div class="results" id="results">
-                <h3>📊 Score Breakdown</h3>
+                <h3 data-kr="📊 점수 상세" data-en="📊 Score Breakdown">📊 점수 상세</h3>
                 <div class="score-breakdown" id="score-breakdown"></div>
                 <div class="total-score" id="total-score"></div>
+            </div>
+            
+            <div class="leaderboard" id="leaderboard" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <h3 data-kr="🏆 점수 기록" data-en="🏆 Leaderboard">🏆 점수 기록</h3>
+                    <button class="clear-history-btn" onclick="clearHistory()" data-kr="기록 삭제" data-en="Clear">기록 삭제</button>
+                </div>
+                <div class="leaderboard-list" id="leaderboard-list"></div>
             </div>
         </div>
     </div>
 
     <script>
+        // Global variables
+        let selectedColors = [];
+        let currentLanguage = 'kr';
+        let scoreHistory = [];
+
+        // Language detection and initialization
+        function detectLanguage() {
+            const browserLang = navigator.language || navigator.userLanguage;
+            currentLanguage = browserLang.startsWith('ko') ? 'kr' : 'en';
+            setLanguage(currentLanguage);
+        }
+
+        // Set language for all elements
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Update all elements with language attributes
+            document.querySelectorAll('[data-kr][data-en]').forEach(element => {
+                element.textContent = element.getAttribute(`data-${lang}`);
+            });
+            
+            // Update player name input placeholder
+            const playerNameInput = document.getElementById('player-name');
+            if (playerNameInput) {
+                playerNameInput.placeholder = lang === 'kr' ? '이름을 입력하세요' : 'Enter your name';
+            }
+            
+            // Update language button active state
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`lang-${lang}`).classList.add('active');
+            
+            // Re-render leaderboard if it exists
+            if (scoreHistory.length > 0) {
+                displayLeaderboard();
+            }
+        }
+
+        // Switch language
+        function switchLanguage(lang) {
+            setLanguage(lang);
+        }
+
+        // Color selection (multi-select)
+        function selectColor(color) {
+            const colorIndex = selectedColors.indexOf(color);
+            
+            if (colorIndex === -1) {
+                // Add color
+                selectedColors.push(color);
+                document.querySelector(`[data-color="${color}"]`).classList.add('active');
+                document.querySelector(`.expedition[data-color="${color}"]`).style.display = 'block';
+            } else {
+                // Remove color
+                selectedColors.splice(colorIndex, 1);
+                document.querySelector(`[data-color="${color}"]`).classList.remove('active');
+                document.querySelector(`.expedition[data-color="${color}"]`).style.display = 'none';
+            }
+        }
+
+        // Calculate score
         function calculateScore() {
             // Hide previous results and errors
             document.getElementById('results').classList.remove('show');
             document.getElementById('error-message').classList.remove('show');
 
-            // Get all input values
-            const expeditions = [
-                { name: 'Red', color: 'red', investment: parseInt(document.getElementById('red-investment').value) || 0 },
-                { name: 'Yellow', color: 'yellow', investment: parseInt(document.getElementById('yellow-investment').value) || 0 },
-                { name: 'Green', color: 'green', investment: parseInt(document.getElementById('green-investment').value) || 0 },
-                { name: 'Blue', color: 'blue', investment: parseInt(document.getElementById('blue-investment').value) || 0 },
-                { name: 'Purple', color: 'purple', investment: parseInt(document.getElementById('purple-investment').value) || 0 }
-            ];
+            // Check if at least one color is selected
+            if (selectedColors.length === 0) {
+                const errorMsg = currentLanguage === 'kr' ? 
+                    '최소 하나의 색상을 선택해주세요.' : 
+                    'Please select at least one color.';
+                showError(errorMsg);
+                return;
+            }
 
-            // Validate inputs
+            // Get target score cards
+            const targetCards = parseInt(document.getElementById('target-cards').value) || 0;
+
+            // Prepare expeditions data
+            const expeditions = [];
+            const colorNames = { red: '❤️', yellow: '💛', green: '💚', blue: '💙', purple: '💜' };
+            
+            for (let color of selectedColors) {
+                const wagerCards = parseInt(document.getElementById(`${color}-wager`).value) || 0;
+                expeditions.push({
+                    name: colorNames[color],
+                    color: color,
+                    wagerCards: wagerCards
+                });
+            }
+
+            // Validate wager cards
             for (let exp of expeditions) {
-                if (exp.investment < 0 || exp.investment > 3) {
-                    showError(`Invalid investment for ${exp.name} expedition. Must be 0-3.`);
+                if (exp.wagerCards < 0 || exp.wagerCards > 3) {
+                    const errorMsg = currentLanguage === 'kr' ? 
+                        `${exp.name} 탐험의 연구 카드 개수가 잘못되었습니다. 0-3 사이의 값을 입력해주세요.` :
+                        `Invalid Wager Cards for ${exp.name} expedition. Must be 0-3.`;
+                    showError(errorMsg);
+                    return;
+                }
+            }
+
+            // Check if each selected color has cards or wager cards
+            for (let exp of expeditions) {
+                let hasCards = false;
+                for (let i = 2; i <= 10; i++) {
+                    const checkbox = document.getElementById(`${exp.color}-${i}`);
+                    if (checkbox && checkbox.checked) {
+                        hasCards = true;
+                        break;
+                    }
+                }
+                
+                if (!hasCards && exp.wagerCards === 0) {
+                    const errorMsg = currentLanguage === 'kr' ? 
+                        `${exp.name} 탐험에 카드나 연구카드가 선택되지 않았습니다.` :
+                        `No cards or Wager Cards selected for ${exp.name} expedition.`;
+                    showError(errorMsg);
                     return;
                 }
             }
@@ -608,7 +1054,7 @@
                 let cardCount = 0;
                 let cardSum = 0;
                 
-                // Get checked cards for this expedition
+                // Get checked cards
                 const checkedCards = [];
                 for (let i = 2; i <= 10; i++) {
                     const checkbox = document.getElementById(`${exp.color}-${i}`);
@@ -620,104 +1066,275 @@
                 }
                 
                 if (cardCount > 0) {
-                    // Calculate expedition score (without bonus yet)
-                    expeditionScore = calculateExpeditionScore(cardCount, cardSum);
+                    // Lost Cities scoring formula:
+                    // 1. Sum of card values
+                    expeditionScore = cardSum;
                     
-                    // Add investment multiplier
-                    if (exp.investment > 0) {
-                        expeditionScore *= (exp.investment + 1);
+                    // 2. Expedition penalty -20
+                    expeditionScore -= 20;
+                    
+                    // 3. Apply wager card multiplier (wager cards + 1)
+                    if (exp.wagerCards > 0) {
+                        expeditionScore *= (exp.wagerCards + 1);
                     }
                     
-                    // Add bonus for 8+ total cards (AFTER investment multiplier)
-                    if (cardCount + exp.investment >= 8) {
+                    // 4. Bonus +20 for 8+ cards (including wager cards)
+                    if (cardCount + exp.wagerCards >= 8) {
                         expeditionScore += 20;
                     }
+                } else if (exp.wagerCards > 0) {
+                    // Only wager cards, no number cards:
+                    // Each wager card costs -20, then apply multiplier
+                    expeditionScore = -20 * exp.wagerCards;
+                    expeditionScore *= (exp.wagerCards + 1);
                 }
 
                 breakdown.push({
                     name: exp.name,
                     cards: cardCount,
                     cardSum: cardSum,
-                    investment: exp.investment,
+                    wagerCards: exp.wagerCards,
                     score: expeditionScore
                 });
 
                 totalScore += expeditionScore;
             }
 
+            // Calculate target score cards (independent of colors, 10 points each)
+            const targetScore = targetCards * 10;
+            
+            // Total calculation: all expedition scores + target score cards
+            const expeditionTotal = totalScore;
+            const finalTotal = expeditionTotal + targetScore;
+
             // Display results
-            displayResults(breakdown, totalScore);
+            displayResults(breakdown, expeditionTotal, targetCards, targetScore, finalTotal);
         }
 
-        function calculateExpeditionScore(cardCount, cardSum) {
-            // Lost City scoring: Sum of card values - 20 penalty
-            if (cardCount < 2) return 0;
-            
-            let score = cardSum;
-            
-            // Penalty: -20 points for each expedition
-            score -= 20;
-            
-            return score;
-        }
-
-        function displayResults(breakdown, totalScore) {
+        // Display results
+        function displayResults(breakdown, expeditionTotal, targetCards, targetScore, finalTotal) {
             const breakdownDiv = document.getElementById('score-breakdown');
             const totalDiv = document.getElementById('total-score');
             
             let breakdownHTML = '';
             
             for (let exp of breakdown) {
-                if (exp.cards > 0) {
+                if (exp.cards > 0 || exp.wagerCards > 0) {
                     let bonusText = '';
-                    if (exp.cards + exp.investment >= 8) {
-                        bonusText = ' + 20 bonus';
+                    if (exp.cards + exp.wagerCards >= 8) {
+                        bonusText = currentLanguage === 'kr' ? ' + 20 보너스' : ' + 20 bonus';
                     }
+                    
+                    const expeditionName = currentLanguage === 'kr' ? 
+                        `${exp.name} 탐험` : 
+                        `${exp.name} Expedition`;
+                    const cardsText = currentLanguage === 'kr' ? '카드' : 'cards';
+                    const sumText = currentLanguage === 'kr' ? '합계' : 'sum';
+                    const penaltyText = currentLanguage === 'kr' ? '페널티' : 'penalty';
+                    const wagerText = currentLanguage === 'kr' ? '연구카드' : 'wager';
                     
                     breakdownHTML += `
                         <div class="score-item">
-                            <span><strong>${exp.name} Expedition:</strong> ${exp.cards} cards (sum: ${exp.cardSum}) - 20 penalty${exp.investment > 0 ? ` × ${exp.investment + 1} (investment)` : ''}${bonusText}</span>
+                            <span><strong>${expeditionName}:</strong> ${exp.cards} ${cardsText} (${sumText}: ${exp.cardSum}) - 20 ${penaltyText}${exp.wagerCards > 0 ? ` × ${exp.wagerCards + 1} (${wagerText})` : ''}${bonusText}</span>
                             <span>${exp.score} pts</span>
                         </div>
                     `;
                 }
             }
 
+            // Show expedition total
+            const expeditionText = currentLanguage === 'kr' ? '색상별 점수 합계' : 'Expedition Scores Total';
+            breakdownHTML += `
+                <div class="score-item" style="border-top: 2px solid #28a745; margin-top: 10px; padding-top: 10px;">
+                    <span><strong>${expeditionText}:</strong></span>
+                    <span>${expeditionTotal} pts</span>
+                </div>
+            `;
+
+            // Show target score cards if any
+            if (targetCards > 0) {
+                const targetText = currentLanguage === 'kr' ? '목표점수 카드 (색상과 별개)' : 'Target Score Cards (Independent)';
+                const targetDesc = currentLanguage === 'kr' ? `${targetCards}개 × 10점` : `${targetCards} × 10 points`;
+                breakdownHTML += `
+                    <div class="score-item">
+                        <span><strong>${targetText}:</strong> ${targetDesc}</span>
+                        <span>${targetScore} pts</span>
+                    </div>
+                `;
+            }
+
             breakdownDiv.innerHTML = breakdownHTML;
-            totalDiv.innerHTML = `🏆 Total Score: ${totalScore} points`;
+            const totalText = currentLanguage === 'kr' ? '최종 총점' : 'Final Total Score';
+            totalDiv.innerHTML = `🏆 ${totalText}: ${finalTotal} points`;
+            
+            // Add to history
+            const playerName = document.getElementById('player-name').value.trim() || 
+                            (currentLanguage === 'kr' ? '익명' : 'Anonymous');
+            addToHistory(playerName, finalTotal);
             
             document.getElementById('results').classList.add('show');
         }
 
+        // Add score to history
+        function addToHistory(playerName, score) {
+            const now = new Date();
+            const timestamp = now.toLocaleTimeString(currentLanguage === 'kr' ? 'ko-KR' : 'en-US', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            scoreHistory.push({
+                player: playerName,
+                score: score,
+                timestamp: timestamp,
+                rawTime: now.getTime()
+            });
+            
+            // Sort by score (highest first), then by time (earliest first for ties)
+            scoreHistory.sort((a, b) => {
+                if (b.score !== a.score) {
+                    return b.score - a.score;
+                }
+                return a.rawTime - b.rawTime;
+            });
+            
+            // Keep only top 10
+            if (scoreHistory.length > 10) {
+                scoreHistory = scoreHistory.slice(0, 10);
+            }
+            
+            displayLeaderboard();
+        }
+
+        // Display leaderboard
+        function displayLeaderboard() {
+            if (scoreHistory.length === 0) {
+                document.getElementById('leaderboard').style.display = 'none';
+                return;
+            }
+            
+            const leaderboardList = document.getElementById('leaderboard-list');
+            let html = '';
+            
+            scoreHistory.forEach((entry, index) => {
+                const rank = index + 1;
+                const rankClass = rank <= 3 ? `rank-${rank}` : '';
+                const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
+                
+                html += `
+                    <div class="leaderboard-item ${rankClass}">
+                        <div class="rank-number">${medal || rank}</div>
+                        <div class="player-name">${entry.player}</div>
+                        <div class="score-value">${entry.score}</div>
+                        <div class="timestamp">${entry.timestamp}</div>
+                    </div>
+                `;
+            });
+            
+            leaderboardList.innerHTML = html;
+            document.getElementById('leaderboard').style.display = 'block';
+        }
+
+        // Clear history
+        function clearHistory() {
+            if (confirm(currentLanguage === 'kr' ? 
+                '모든 점수 기록을 삭제하시겠습니까?' : 
+                'Are you sure you want to clear all score history?')) {
+                scoreHistory = [];
+                document.getElementById('leaderboard').style.display = 'none';
+            }
+        }
+
+        // Show error message
         function showError(message) {
             const errorDiv = document.getElementById('error-message');
             errorDiv.textContent = message;
             errorDiv.classList.add('show');
         }
 
-        // Add input validation for investment fields
-        document.querySelectorAll('input[type="number"]').forEach(input => {
-            input.addEventListener('input', function() {
-                const value = parseInt(this.value);
-                const min = parseInt(this.min);
-                const max = parseInt(this.max);
-                
-                if (this.value !== '' && (value < min || value > max)) {
-                    this.style.borderColor = '#dc3545';
-                } else {
-                    this.style.borderColor = '#dee2e6';
-                }
+        // Clear all inputs
+        function clearAll() {
+            // Clear all checkboxes
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                checkbox.checked = false;
             });
-        });
+            
+            // Clear all number inputs
+            document.querySelectorAll('input[type="number"]').forEach(input => {
+                input.value = '';
+                input.style.borderColor = '#dee2e6';
+            });
+            
+            // Note: Player name is intentionally NOT cleared so users don't have to re-enter
+            // Uncomment the line below if you want to clear player name too:
+            // document.getElementById('player-name').value = '';
+            
+            // Clear target cards
+            document.getElementById('target-cards').value = '';
+            
+            // Hide results
+            document.getElementById('results').classList.remove('show');
+            document.getElementById('error-message').classList.remove('show');
+            
+            // Clear color selection
+            document.querySelectorAll('.color-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Hide all expeditions
+            document.querySelectorAll('.expedition').forEach(expedition => {
+                expedition.style.display = 'none';
+            });
+            
+            // Clear selected colors array
+            selectedColors = [];
+        }
 
-        // Add Enter key support
-        document.querySelectorAll('input').forEach(input => {
-            input.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    calculateScore();
-                }
+        // Input validation for number fields
+        document.addEventListener('DOMContentLoaded', function() {
+            // Detect and set language
+            detectLanguage();
+            
+            // Color button event listeners
+            document.querySelectorAll('.color-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    selectColor(this.dataset.color);
+                });
+            });
+            
+            // Language button event listeners
+            document.getElementById('lang-kr').addEventListener('click', function() {
+                switchLanguage('kr');
+            });
+            document.getElementById('lang-en').addEventListener('click', function() {
+                switchLanguage('en');
+            });
+            
+            // Input validation
+            document.querySelectorAll('input[type="number"]').forEach(input => {
+                input.addEventListener('input', function() {
+                    const value = parseInt(this.value);
+                    const min = parseInt(this.min);
+                    const max = parseInt(this.max);
+                    
+                    if (this.value !== '' && (value < min || value > max)) {
+                        this.style.borderColor = '#dc3545';
+                    } else {
+                        this.style.borderColor = '#dee2e6';
+                    }
+                });
+            });
+            
+            // Enter key support
+            document.querySelectorAll('input').forEach(input => {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        calculateScore();
+                    }
+                });
             });
         });
     </script>
 </body>
 </html>
+
